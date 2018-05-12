@@ -10,9 +10,15 @@ import Foundation
 import JSONJoy
 
 struct NowPlayingMovieJSON: JSONJoy {
-    var results: [Movie]
+    var results: [MovieJSON]
+    var page: Int
+    var total_results: Int
+    var total_pages: Int
     
     init(_ decoder: JSONLoader) throws {
         results = try decoder["results"].get()
+        page = try decoder["page"].get()
+        total_results = try decoder["total_results"].get()
+        total_pages = try decoder["total_pages"].get()
     }
 }

@@ -11,7 +11,7 @@ import JSONJoy
 
 struct SimilarMovieJSON: JSONJoy {
     var page: Int
-    var results: [Movie]
+    var results: [MovieJSON]
     var total_pages: Int
     var total_results: Int
     

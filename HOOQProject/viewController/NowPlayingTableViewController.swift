@@ -14,7 +14,10 @@ import Kingfisher
 class NowPlayingTableViewController: UITableViewController {
     
     // MARK: Properties
-    var datasource: NowPlayingMovieJSON?
+    private let movieSegue: String = "movieSegue"
+    
+    private var datasource: NowPlayingMovieJSON?
+    private var page: String = "1"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,8 +27,8 @@ class NowPlayingTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        
-        Alamofire.request(RestAPI.getNowPlayingMovieURL(), method: .get, parameters: RestAPI.getParams(page: "1") , encoding: URLEncoding.default, headers: nil)
+    
+        Alamofire.request(RestAPI.getNowPlayingMovieURL(), method: .get, parameters: RestAPI.getParams(page: page) , encoding: URLEncoding.default, headers: nil)
             .responseJSON(completionHandler: { (response) in
                 switch response.result {
                 case .success(let result):
@@ -34,7 +37,10 @@ class NowPlayingTableViewController: UITableViewController {
                     //finally fullfill the expectation
                     do {
                         self.datasource = try NowPlayingMovieJSON(JSONLoader(result))
-                        self.tableView.reloadData()
+                        
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        }
                     } catch {
                         print("unable to parse the JSON")
                     }
@@ -67,11 +73,21 @@ class NowPlayingTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let movieCell = tableView.dequeueReusableCell(withIdentifier: "movieCell", for: indexPath) as? MovieTableViewCell,
             let datasource = datasource {
-            if let imageUrl: URL = URL(string: RestAPI.getPosterPathURL(poster_path: datasource.results[indexPath.row].poster_path)) {
+            
+            if let poster = datasource.results[indexPath.row].poster_path, let imageUrl: URL = URL(string: RestAPI.getPosterPathURL(poster_path: poster)) {
                 movieCell.movieImage.kf.setImage(with: imageUrl, options: [.transition(.fade(0.2))])
             }
             movieCell.titleLabel.text = datasource.results[indexPath.row].original_title
-            movieCell.previewLabel.text = datasource.results[indexPath.row].overview
+            movieCell.overviewLabel.text = datasource.results[indexPath.row].overview
+            movieCell.scoreLabel.text = "\(datasource.results[indexPath.row].vote_average)"
+            
+            let releaseDate: Date? = releaseDateFormatterFromJSON.date(from: datasource.results[indexPath.row].release_date)
+            if let releaseDate = releaseDate {
+                movieCell.releaseDateLabel.text = releaseDateFormatter.string(from: releaseDate)
+            } else {
+                movieCell.releaseDateLabel.text = datasource.results[indexPath.row].release_date
+            }
+            
             return movieCell
         } else {
             return UITableViewCell()
@@ -79,7 +95,24 @@ class NowPlayingTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "movieSegue", sender: nil)
+        if let datasource = datasource {
+            performSegue(withIdentifier: movieSegue, sender: datasource.results[indexPath.row])
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 200.0
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if let datasource = datasource, let pageNum = Int(page), pageNum < datasource.total_pages {
+            let lastElement = datasource.results.count - 1
+            
+            if indexPath.row == lastElement {
+                self.page = "\(pageNum + 1)"
+                retrieveNowPlaying(page: self.page)
+            }
+        }
     }
 
     /*
@@ -124,10 +157,45 @@ class NowPlayingTableViewController: UITableViewController {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         
-        if segue.identifier == "movieSegue" {
-            if let movieViewController = segue.destination as? MovieViewController {
+        if segue.identifier == movieSegue {
+            if let movieViewController = segue.destination as? MovieViewController, let movie = sender as? MovieJSON {
+                let backItem = UIBarButtonItem()
+                backItem.title = ""
+                navigationItem.backBarButtonItem = UIBarButtonItem()
                 
+                movieViewController.movie = movie
             }
         }
+    }
+    
+    // MARK: Private Methods
+    fileprivate func retrieveNowPlaying(page: String) {
+        Alamofire.request(RestAPI.getNowPlayingMovieURL(), method: .get, parameters: RestAPI.getParams(page: page) , encoding: URLEncoding.default, headers: nil)
+            .responseJSON(completionHandler: { (response) in
+                switch response.result {
+                case .success(let result):
+                    //do the checking with expected result
+                    //AssertEqual or whatever you need to do with the data
+                    //finally fullfill the expectation
+                    do {
+                        let newDatasource = try NowPlayingMovieJSON(JSONLoader(result))
+
+                        switch page {
+                        case "1":
+                            self.datasource = newDatasource
+                        default:
+                            self.datasource?.results.append(contentsOf: newDatasource.results)
+                        }
+                        
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        }
+                    } catch {
+                        print("unable to parse the JSON")
+                    }
+                case .failure(let error):
+                    print(error)
+                }
+            })
     }
 }
