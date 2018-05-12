@@ -8,6 +8,8 @@
 
 import XCTest
 @testable import HOOQProject
+import Alamofire
+import JSONJoy
 
 class HOOQProjectTests: XCTestCase {
     
@@ -33,4 +35,67 @@ class HOOQProjectTests: XCTestCase {
         }
     }
     
+    func testGetNowPlayingMovie() {
+        let expectations = expectation(description: "testGetNowPlayingMovie")
+        let params = RestAPI.getParams(page: "1")
+        Alamofire.request(RestAPI.getNowPlayingMovieURL(), method: .get, parameters: params , encoding: URLEncoding.default, headers: nil)
+            .responseJSON(completionHandler: { (response) in
+                switch response.result {
+                case .success(let result):
+                    //do the checking with expected result
+                    //AssertEqual or whatever you need to do with the data
+                    //finally fullfill the expectation
+                    do {
+                        let nowPlayingMovieJSON = try NowPlayingMovieJSON(JSONLoader(result))
+                        print(nowPlayingMovieJSON)
+                    } catch {
+                        print("unable to parse the JSON")
+                    }
+                    expectations.fulfill()
+                case .failure(let error):
+                    //this is failed case
+                    XCTFail("Server response failed : \(error.localizedDescription)")
+                    expectations.fulfill()
+                }
+            })
+
+        //wait for some time for the expectation (you can wait here more than 30 sec, depending on the time for the response)
+        waitForExpectations(timeout: 5, handler: { (error) in
+            if let error = error {
+                print("Failed : \(error.localizedDescription)")
+            }
+        })
+    }
+    
+    func testGetSimilarMovie() {
+        let expectations = expectation(description: "testGetSimilarMovie")
+        let params = RestAPI.getParams(page: "1")
+        Alamofire.request(RestAPI.getSimilarMovieURL(movie_id: "299536"), method: .get, parameters: params, encoding: URLEncoding.default, headers: nil)
+            .responseJSON(completionHandler: { (response) in
+                switch response.result {
+                case .success(let result):
+                    //do the checking with expected result
+                    //AssertEqual or whatever you need to do with the data
+                    //finally fullfill the expectation
+                    do {
+                        let similarMovieJSON = try SimilarMovieJSON(JSONLoader(result))
+                        print(similarMovieJSON)
+                    } catch {
+                        print("unable to parse the JSON")
+                    }
+                    expectations.fulfill()
+                case .failure(let error):
+                    //this is failed case
+                    XCTFail("Server response failed : \(error.localizedDescription)")
+                    expectations.fulfill()
+                }
+            })
+
+        //wait for some time for the expectation (you can wait here more than 30 sec, depending on the time for the response)
+        waitForExpectations(timeout: 5, handler: { (error) in
+            if let error = error {
+                print("Failed : \(error.localizedDescription)")
+            }
+        })
+    }
 }
