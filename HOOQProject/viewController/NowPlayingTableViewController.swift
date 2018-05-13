@@ -27,6 +27,8 @@ class NowPlayingTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+        tableView.backgroundColor = Theme.black
     
         Alamofire.request(RestAPI.getNowPlayingMovieURL(), method: .get, parameters: RestAPI.getParams(page: page) , encoding: URLEncoding.default, headers: nil)
             .responseJSON(completionHandler: { (response) in

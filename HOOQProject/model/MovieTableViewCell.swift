@@ -20,6 +20,12 @@ class MovieTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
+        backgroundColor = Theme.black
+        
+        titleLabel.textColor = Theme.red
+        scoreLabel.textColor = Theme.white
+        overviewLabel.textColor = Theme.white
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

@@ -23,6 +23,7 @@
 		33452A8720A6E2470078F186 /* MovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33452A8620A6E2470078F186 /* MovieViewController.swift */; };
 		3350A5B720A7006600DDE591 /* DateUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3350A5B620A7006600DDE591 /* DateUtil.swift */; };
 		336F0EC120A729F900384045 /* MovieCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336F0EC020A729F900384045 /* MovieCollectionViewCell.swift */; };
+		33A33D0020A85C51002A42CB /* ColorUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A33CFF20A85C51002A42CB /* ColorUtil.swift */; };
 		631A2A2CA26D2398335F4018 /* Pods_HOOQProjectTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 330D50B4EA3670E8E681680F /* Pods_HOOQProjectTests.framework */; };
 		70AE5787BE694D5E2F8B5D4C /* Pods_HOOQProject.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 307E9127D294AFF70045812A /* Pods_HOOQProject.framework */; };
 		C80D5B018AA4C7BEEA96831F /* Pods_HOOQProjectUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35C057AE70A44603273C41E0 /* Pods_HOOQProjectUITests.framework */; };
@@ -71,6 +72,7 @@
 		33452A8620A6E2470078F186 /* MovieViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieViewController.swift; sourceTree = "<group>"; };
 		3350A5B620A7006600DDE591 /* DateUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtil.swift; sourceTree = "<group>"; };
 		336F0EC020A729F900384045 /* MovieCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCollectionViewCell.swift; sourceTree = "<group>"; };
+		33A33CFF20A85C51002A42CB /* ColorUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorUtil.swift; sourceTree = "<group>"; };
 		35C057AE70A44603273C41E0 /* Pods_HOOQProjectUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HOOQProjectUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C31A5A29C5D909E9A074BE2 /* Pods-HOOQProjectUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HOOQProjectUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-HOOQProjectUITests/Pods-HOOQProjectUITests.release.xcconfig"; sourceTree = "<group>"; };
 		AF31141EDDEE3BD2FC8238E2 /* Pods-HOOQProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HOOQProject.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HOOQProject/Pods-HOOQProject.debug.xcconfig"; sourceTree = "<group>"; };
@@ -177,6 +179,7 @@
 			children = (
 				33452A7720A6AE9F0078F186 /* Constants.swift */,
 				3350A5B620A7006600DDE591 /* DateUtil.swift */,
+				33A33CFF20A85C51002A42CB /* ColorUtil.swift */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -366,14 +369,18 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-HOOQProject/Pods-HOOQProject-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/Cosmos/Cosmos.framework",
 				"${BUILT_PRODUCTS_DIR}/JSONJoy-Swift/JSONJoy.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
+				"${BUILT_PRODUCTS_DIR}/ReadMoreTextView/ReadMoreTextView.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Cosmos.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JSONJoy.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReadMoreTextView.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -444,6 +451,7 @@
 				33452A4A20A6ABFD0078F186 /* ViewController.swift in Sources */,
 				3350A5B720A7006600DDE591 /* DateUtil.swift in Sources */,
 				33452A4820A6ABFD0078F186 /* AppDelegate.swift in Sources */,
+				33A33D0020A85C51002A42CB /* ColorUtil.swift in Sources */,
 				33452A8220A6D63D0078F186 /* MovieTableViewCell.swift in Sources */,
 				33452A7F20A6D2D70078F186 /* MovieJSON.swift in Sources */,
 				33452A7D20A6D25E0078F186 /* SimilarMovieJSON.swift in Sources */,

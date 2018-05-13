@@ -8,6 +8,8 @@ target 'HOOQProject' do
   pod 'Alamofire', '~> 4.7'
   pod 'JSONJoy-Swift', '~> 3.0.2'
   pod 'Kingfisher', '~> 4.0'
+  pod 'Cosmos', '~> 16.0'
+  pod 'ReadMoreTextView'
 
   # Pods for HOOQProject
 
