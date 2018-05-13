@@ -77,9 +77,9 @@ class NowPlayingTableViewController: UITableViewController {
             let datasource = datasource {
             
             if let poster = datasource.results[indexPath.row].poster_path, let imageUrl: URL = URL(string: RestAPI.getPosterPathURL(poster_path: poster)) {
-                movieCell.movieImage.kf.setImage(with: imageUrl, options: [.transition(.fade(0.2))])
+                movieCell.movieImage.kf.setImage(with: imageUrl, placeholder: ImageUtil.noPosterImage, options: [.transition(.fade(0.2))])
             }
-            movieCell.titleLabel.text = datasource.results[indexPath.row].original_title
+            movieCell.titleLabel.text = datasource.results[indexPath.row].title
             movieCell.overviewLabel.text = datasource.results[indexPath.row].overview
             movieCell.scoreLabel.text = "\(datasource.results[indexPath.row].vote_average)"
             

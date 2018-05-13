@@ -48,10 +48,10 @@ class MovieViewController: UIViewController, UICollectionViewDataSource, UIColle
         relatedMovieCollectionView.backgroundColor = Theme.black
         
         if let movie = movie {
-            navigationItem.title = movie.original_title
+            navigationItem.title = movie.title
             
             if let backdrop = movie.backdrop_path, let imageUrl: URL = URL(string: RestAPI.getPosterPathURL(poster_path: backdrop)) {
-                movieImage.kf.setImage(with: imageUrl)
+                movieImage.kf.setImage(with: imageUrl, placeholder: ImageUtil.noBackdropImage)
             }
             
             let releaseDate: Date? = releaseDateFormatterFromJSON.date(from: movie.release_date)
@@ -114,7 +114,7 @@ class MovieViewController: UIViewController, UICollectionViewDataSource, UIColle
         if let movieCell = collectionView.dequeueReusableCell(withReuseIdentifier: "movieCell", for: indexPath) as? MovieCollectionViewCell {
             
             if let datasource = datasource, let poster = datasource.results[indexPath.row].poster_path, let imageUrl: URL = URL(string: RestAPI.getPosterPathURL(poster_path: poster)) {
-                movieCell.movieImage.kf.setImage(with: imageUrl)
+                movieCell.movieImage.kf.setImage(with: imageUrl, placeholder: ImageUtil.noPosterImage)
             }
             
             return movieCell

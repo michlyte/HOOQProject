@@ -48,14 +48,13 @@ class HOOQProjectTests: XCTestCase {
                     do {
                         let nowPlayingMovieJSON = try NowPlayingMovieJSON(JSONLoader(result))
                         print(nowPlayingMovieJSON)
+                        expectations.fulfill()
                     } catch {
                         print("unable to parse the JSON")
                     }
-                    expectations.fulfill()
                 case .failure(let error):
                     //this is failed case
                     XCTFail("Server response failed : \(error.localizedDescription)")
-                    expectations.fulfill()
                 }
             })
 
@@ -80,14 +79,13 @@ class HOOQProjectTests: XCTestCase {
                     do {
                         let similarMovieJSON = try SimilarMovieJSON(JSONLoader(result))
                         print(similarMovieJSON)
+                        expectations.fulfill()
                     } catch {
                         print("unable to parse the JSON")
                     }
-                    expectations.fulfill()
                 case .failure(let error):
                     //this is failed case
                     XCTFail("Server response failed : \(error.localizedDescription)")
-                    expectations.fulfill()
                 }
             })
 
