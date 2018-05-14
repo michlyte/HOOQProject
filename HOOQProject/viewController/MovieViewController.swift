@@ -13,7 +13,7 @@ import Kingfisher
 import Cosmos
 import ReadMoreTextView
 
-class MovieViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class MovieViewController: UIViewController {
     // MARK: Properties
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var contentView: UIView!
@@ -35,18 +35,41 @@ class MovieViewController: UIViewController, UICollectionViewDataSource, UIColle
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        view.backgroundColor = Theme.black
-        contentView.backgroundColor = Theme.black
+        styleUI()
+        fillUI()
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+    /*
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+    }
+    */
+
+    // MARK: Private Methods
+    fileprivate func styleUI() {
+        view.backgroundColor = ColorUtil.black
+        contentView.backgroundColor = ColorUtil.black
         
-        titleLabel.textColor = Theme.red
-        scoreLabel.textColor = Theme.white
-        voteCountLabel.textColor = Theme.white
-        overviewTitleLabel.textColor = Theme.white
-        overviewLabel.textColor = Theme.white
-        relatedMovieLabel.textColor = Theme.white
+        titleLabel.textColor = ColorUtil.red
+        scoreLabel.textColor = ColorUtil.white
+        voteCountLabel.textColor = ColorUtil.white
+        overviewTitleLabel.textColor = ColorUtil.white
+        overviewLabel.textColor = ColorUtil.white
+        relatedMovieLabel.textColor = ColorUtil.white
         
-        relatedMovieCollectionView.backgroundColor = Theme.black
-        
+        relatedMovieCollectionView.backgroundColor = ColorUtil.black
+    }
+    
+    fileprivate func fillUI() {
         if let movie = movie {
             navigationItem.title = movie.title
             
@@ -54,11 +77,8 @@ class MovieViewController: UIViewController, UICollectionViewDataSource, UIColle
                 movieImage.kf.setImage(with: imageUrl, placeholder: ImageUtil.noBackdropImage)
             }
             
-            let releaseDate: Date? = releaseDateFormatterFromJSON.date(from: movie.release_date)
-            
-            var releaseYear: String = ""
-            if let releaseDate = releaseDate {
-                releaseYear = releaseYearFormatter.string(from: releaseDate)
+            let releaseYear: String? = movie.getReleaseYearString()
+            if let releaseYear = releaseYear {
                 titleLabel.text = movie.title+"("+releaseYear+")"
             } else {
                 titleLabel.text = movie.title
@@ -91,13 +111,9 @@ class MovieViewController: UIViewController, UICollectionViewDataSource, UIColle
                 })
         }
     }
+}
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    // MARK: UICollectionView
+extension MovieViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -133,18 +149,5 @@ class MovieViewController: UIViewController, UICollectionViewDataSource, UIColle
             
             navigationController?.pushViewController(movieVC, animated: true)
         }
-        print(indexPath.row)
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

@@ -28,7 +28,7 @@ class NowPlayingTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
-        tableView.backgroundColor = Theme.black
+        tableView.backgroundColor = ColorUtil.black
     
         Alamofire.request(RestAPI.getNowPlayingMovieURL(), method: .get, parameters: RestAPI.getParams(page: page) , encoding: URLEncoding.default, headers: nil)
             .responseJSON(completionHandler: { (response) in
@@ -75,20 +75,15 @@ class NowPlayingTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let movieCell = tableView.dequeueReusableCell(withIdentifier: "movieCell", for: indexPath) as? MovieTableViewCell,
             let datasource = datasource {
-            
-            if let poster = datasource.results[indexPath.row].poster_path, let imageUrl: URL = URL(string: RestAPI.getPosterPathURL(poster_path: poster)) {
+
+            let movieJSON = datasource.results[indexPath.row]
+            if let poster = movieJSON.poster_path, let imageUrl: URL = URL(string: RestAPI.getPosterPathURL(poster_path: poster)) {
                 movieCell.movieImage.kf.setImage(with: imageUrl, placeholder: ImageUtil.noPosterImage, options: [.transition(.fade(0.2))])
             }
-            movieCell.titleLabel.text = datasource.results[indexPath.row].title
-            movieCell.overviewLabel.text = datasource.results[indexPath.row].overview
-            movieCell.scoreLabel.text = "\(datasource.results[indexPath.row].vote_average)"
-            
-            let releaseDate: Date? = releaseDateFormatterFromJSON.date(from: datasource.results[indexPath.row].release_date)
-            if let releaseDate = releaseDate {
-                movieCell.releaseDateLabel.text = releaseDateFormatter.string(from: releaseDate)
-            } else {
-                movieCell.releaseDateLabel.text = datasource.results[indexPath.row].release_date
-            }
+            movieCell.titleLabel.text = movieJSON.title
+            movieCell.overviewLabel.text = movieJSON.overview
+            movieCell.scoreLabel.text = "\(movieJSON.vote_average)"
+            movieCell.releaseDateLabel.text = movieJSON.getReleaseDateString() ?? movieJSON.release_date
             
             return movieCell
         } else {

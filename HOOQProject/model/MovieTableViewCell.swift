@@ -21,11 +21,11 @@ class MovieTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         
-        backgroundColor = Theme.black
+        backgroundColor = ColorUtil.black
         
-        titleLabel.textColor = Theme.red
-        scoreLabel.textColor = Theme.white
-        overviewLabel.textColor = Theme.white
+        titleLabel.textColor = ColorUtil.red
+        scoreLabel.textColor = ColorUtil.white
+        overviewLabel.textColor = ColorUtil.white
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

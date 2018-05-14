@@ -28,7 +28,6 @@ struct MovieJSON: JSONJoy {
     init(_ decoder: JSONLoader) throws {
         vote_count = try decoder["vote_count"].get()
         id = try decoder["id"].get()
-//        print(id)
         video = try decoder["video"].get()
         vote_average = try decoder["vote_average"].get()
         title = try decoder["title"].get()
@@ -41,5 +40,23 @@ struct MovieJSON: JSONJoy {
         adult = try decoder["adult"].get()
         overview = try decoder["overview"].get()
         release_date = try decoder["release_date"].get()
+    }
+    
+    func getReleaseDateString() -> String? {
+        let releaseDate: Date? = releaseDateFormatterFromJSON.date(from: self.release_date)
+        if let releaseDate = releaseDate {
+            return releaseDateFormatter.string(from: releaseDate)
+        } else {
+            return nil
+        }
+    }
+    
+    func getReleaseYearString() -> String? {
+        let releaseDate: Date? = releaseDateFormatterFromJSON.date(from: self.release_date)
+        if let releaseDate = releaseDate {
+            return releaseYearFormatter.string(from: releaseDate)
+        } else {
+            return nil
+        }
     }
 }
