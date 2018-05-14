@@ -21,16 +21,21 @@ class MovieTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         
-        backgroundColor = ColorUtil.black
-        
-        titleLabel.textColor = ColorUtil.red
-        scoreLabel.textColor = ColorUtil.white
-        overviewLabel.textColor = ColorUtil.white
+        styleUI()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    // MARK: Private Methods
+    fileprivate func styleUI() {
+        backgroundColor = ColorUtil.black
+        
+        titleLabel.textColor = ColorUtil.red
+        scoreLabel.textColor = ColorUtil.white
+        overviewLabel.textColor = ColorUtil.white
     }
 }
