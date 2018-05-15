@@ -36,6 +36,7 @@ class MovieTableViewCell: UITableViewCell {
         
         titleLabel.textColor = ColorUtil.red
         scoreLabel.textColor = ColorUtil.white
+//        scoreLabel.textColor = ColorUtil.yellow
         overviewLabel.textColor = ColorUtil.white
     }
 }

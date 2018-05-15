@@ -11,7 +11,6 @@ import Alamofire
 import JSONJoy
 import Kingfisher
 import Cosmos
-import ReadMoreTextView
 
 class MovieViewController: UIViewController {
     // MARK: Properties
@@ -57,6 +56,7 @@ class MovieViewController: UIViewController {
     // MARK: Private Methods
     fileprivate func styleUI() {
         view.backgroundColor = ColorUtil.black
+        scrollView.indicatorStyle = .white
         contentView.backgroundColor = ColorUtil.black
         
         titleLabel.textColor = ColorUtil.red

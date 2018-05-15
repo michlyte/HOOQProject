@@ -28,28 +28,9 @@ class NowPlayingTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
-        tableView.backgroundColor = ColorUtil.black
-    
-        Alamofire.request(RestAPI.getNowPlayingMovieURL(), method: .get, parameters: RestAPI.getParams(page: page) , encoding: URLEncoding.default, headers: nil)
-            .responseJSON(completionHandler: { (response) in
-                switch response.result {
-                case .success(let result):
-                    //do the checking with expected result
-                    //AssertEqual or whatever you need to do with the data
-                    //finally fullfill the expectation
-                    do {
-                        self.datasource = try NowPlayingMovieJSON(JSONLoader(result))
-                        
-                        DispatchQueue.main.async {
-                            self.tableView.reloadData()
-                        }
-                    } catch {
-                        print("unable to parse the JSON")
-                    }
-                case .failure(let error):
-                    print(error)
-                }
-            })
+        styleUI()
+        fillUI()
+        initData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -103,7 +84,7 @@ class NowPlayingTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let datasource = datasource, let pageNum = Int(page), pageNum < datasource.total_pages {
-            let lastElement = datasource.results.count - 1
+            let lastElement = datasource.results.count - 5 > 0 ? datasource.results.count - 5 : datasource.results.count - 1
             
             if indexPath.row == lastElement {
                 self.page = "\(pageNum + 1)"
@@ -165,7 +146,58 @@ class NowPlayingTableViewController: UITableViewController {
         }
     }
     
+    // MARK: Actions
+    @objc fileprivate func onRefresh(sender: UIRefreshControl) {
+        initData()
+    }
+    
     // MARK: Private Methods
+    fileprivate func styleUI() {
+        tableView.backgroundColor = ColorUtil.black
+        tableView.indicatorStyle = .white
+    }
+    
+    fileprivate func fillUI() {
+        refreshControl?.tintColor = ColorUtil.white
+        refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
+    }
+    
+    fileprivate func initData() {
+        page = "1"
+        Alamofire.request(RestAPI.getNowPlayingMovieURL(), method: .get, parameters: RestAPI.getParams(page: page) , encoding: URLEncoding.default, headers: nil)
+            .responseJSON(completionHandler: { (response) in
+                switch response.result {
+                case .success(let result):
+                    //do the checking with expected result
+                    //AssertEqual or whatever you need to do with the data
+                    //finally fullfill the expectation
+                    do {
+                        self.datasource = try NowPlayingMovieJSON(JSONLoader(result))
+                        
+                        if (self.refreshControl?.isRefreshing)! {
+                            self.refreshControl?.endRefreshing()
+                        }
+                        
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        }
+                    } catch {
+                        print("unable to parse the JSON")
+                        
+                        if (self.refreshControl?.isRefreshing)! {
+                            self.refreshControl?.endRefreshing()
+                        }
+                    }
+                case .failure(let error):
+                    if (self.refreshControl?.isRefreshing)! {
+                        self.refreshControl?.endRefreshing()
+                    }
+                    
+                    print(error)
+                }
+            })
+    }
+    
     fileprivate func retrieveNowPlaying(page: String) {
         Alamofire.request(RestAPI.getNowPlayingMovieURL(), method: .get, parameters: RestAPI.getParams(page: page) , encoding: URLEncoding.default, headers: nil)
             .responseJSON(completionHandler: { (response) in
