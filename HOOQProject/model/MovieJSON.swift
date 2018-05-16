@@ -13,9 +13,9 @@ struct MovieJSON: JSONJoy {
     var vote_count: Int
     var id: Int
     var video: Bool
-    var vote_average: Float
+    var vote_average: CGFloat
     var title: String
-    var popularity: Float
+    var popularity: Double?
     var poster_path: String?
     var original_language: String
     var original_title: String
@@ -31,7 +31,7 @@ struct MovieJSON: JSONJoy {
         video = try decoder["video"].get()
         vote_average = try decoder["vote_average"].get()
         title = try decoder["title"].get()
-        popularity = try decoder["popularity"].get()
+        popularity = decoder["popularity"].getOptional()
         poster_path = decoder["poster_path"].getOptional()
         original_language = try decoder["original_language"].get()
         original_title = try decoder["original_title"].get()

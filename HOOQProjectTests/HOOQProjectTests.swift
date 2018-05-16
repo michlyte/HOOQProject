@@ -59,7 +59,7 @@ class HOOQProjectTests: XCTestCase {
             })
 
         //wait for some time for the expectation (you can wait here more than 30 sec, depending on the time for the response)
-        waitForExpectations(timeout: 5, handler: { (error) in
+        waitForExpectations(timeout: 1, handler: { (error) in
             if let error = error {
                 print("Failed : \(error.localizedDescription)")
             }
